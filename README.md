@@ -17,7 +17,7 @@ proj-venv\Scripts\activate
 En mac :
 
 ```
-source proj/bin/activate
+source proj-venv/bin/activate
 ```
 
 Finalmente, para descargar las librerías:
