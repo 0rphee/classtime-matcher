@@ -138,6 +138,19 @@ class Subject:
 
 
 
+def main() -> None:
+    print(Class(Day.Monday, Time(Hour.H10, Minute.M00), Time(Hour.H11, Minute.M30))) # testing
+    print(Hour.H1.str_val)
+    print(Hour.H0 < Hour.H1)
+    print(Hour.H0, Hour.H0 >= Hour.H0, Hour.H0)
+    print(Time(Hour.H10, Minute.M30))
+    print(Time(Hour.H10, Minute.M00) > Time(Hour.H11, Minute.M30))
+    print("Classes overlap ", classesOverlap(
+        Class(Day.Friday, Time(Hour.H10, Minute.M00), Time(Hour.H11, Minute.M30)),
+        Class(Day.Friday, Time(Hour.H0, Minute.M30), Time(Hour.H11, Minute.M30)),
+    ))
+
+
 # execute ONLY if the module is not imported:
 # ex. python3 main.py
 if __name__ == "__main__":
