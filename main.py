@@ -136,6 +136,16 @@ class Subject:
         self.professor = professor
         self.classes = classes
 
+def classesOverlap(class1: Class, class2: Class):
+    if class1.day is class2.day:
+        cond1 = (class1.start_time == class2.start_time) & (class1.end_time  == class2.end_time)
+        cond2 = (class1.start_time <  class2.start_time) & (class2.start_time < class1.end_time)
+        cond3 = (class1.start_time <  class2.end_time)   & (class2.end_time   < class1.end_time)
+        cond4 = (class2.start_time <  class1.start_time) & (class1.start_time < class2.end_time)
+        cond5 = (class2.start_time <  class1.end_time)   & (class1.end_time   < class2.end_time)
+        return (cond1 | cond2 | cond3 | cond4 | cond5 | cond5)
+    else:
+        return False
 
 
 def main() -> None:
