@@ -103,15 +103,14 @@ class Time:
             return self.hour <= other.hour
 
 class Day(Enum):
-    Monday    = (0, "Monday")
-    Tuesday   = (1, "Tuesday")
-    Wednesday = (2, "Wednesday")
-    Thursday  = (3, "Thursday")
-    Friday    = (4, "Friday")
-    Saturday  = (5, "Saturday")
-    Sunday    = (6, "Sunday")
-    def __init__(self, int_val: int, str_val: str):
-        self.int_val = int_val
+    Monday    = "Monday"
+    Tuesday   = "Tuesday"
+    Wednesday = "Wednesday"
+    Thursday  = "Thursday"
+    Friday    = "Friday"
+    Saturday  = "Saturday"
+    Sunday    = "Sunday"
+    def __init__(self, str_val: str):
         self.str_val = str_val
     def __str__(self) -> str:
         return self.str_val
