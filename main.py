@@ -84,22 +84,18 @@ class Time:
             return self.minute > other.minute
         else:
             return self.hour > other.hour
-        return self.int_val > other.int_val
 
     def __ge__(self, other) -> bool:
         if self.hour == other.hour:
             return self.minute >= other.minute
         else:
             return self.hour >= other.hour
-            
     def __lt__(self, other) -> bool:
         if self.hour == other.hour:
             return self.minute < other.minute
         else:
             return self.hour < other.hour
-        return self.int_val < other.int_val
 
-        return self.int_val < other.int_val
     def __le__(self, other) -> bool:
         if self.hour == other.hour:
             return self.minute <= other.minute
@@ -119,7 +115,6 @@ class Day(Enum):
         self.str_val = str_val
     def __str__(self) -> str:
         return self.str_val
-
 
 class Class:
     __match_args__ = ("day", "start_time", "end_time")
