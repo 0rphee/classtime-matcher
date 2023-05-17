@@ -172,10 +172,13 @@ class Class:
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
 class Subject:
-    def __init__(self, name: str, professor: str, classes: list[Class]):
+    def __init__(self, name: str, professor: str, key: str, classes: list[Class]):
         self.name = name
         self.professor = professor
+        self.key = key
         self.classes = classes
+    def __str__(self) -> str:
+        return f"{self.name}, {self.professor}, {self.key}, [{','.join(map(lambda x: x.__str__(), self.classes))}]"
 
 # Check if two classes overlap in time 
 def classesOverlap(class1: Class, class2: Class):
