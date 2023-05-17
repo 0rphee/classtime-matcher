@@ -1,5 +1,8 @@
 from enum import Enum
+from typing import Tuple
+import csv
 # enum docs: https://docs.python.org/3/howto/enum.html#when-to-use-new-vs-init
+# csv docs: https://docs.python.org/3/library/csv.html
 
 class Minute(Enum):
     # the int value is for comparing with <, ==, <=, >=
@@ -172,10 +175,13 @@ class Class:
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
 class Subject:
-    def __init__(self, name: str, professor: str, classes: list[Class]):
+    def __init__(self, name: str, professor: str, key: str, classes: list[Class]):
         self.name = name
         self.professor = professor
+        self.key = key
         self.classes = classes
+    def __str__(self) -> str:
+        return f"{self.name}, {self.professor}, {self.key}, [{','.join(map(lambda x: x.__str__(), self.classes))}]"
 
 # Check if two classes overlap in time 
 def classesOverlap(class1: Class, class2: Class):
@@ -198,6 +204,79 @@ def classesOverlap(class1: Class, class2: Class):
     else:
         return False
 
+def parseHour(text: str) -> Hour:
+    # Parses the hour from a given text and returns the corresponding Hour object
+    match text[0]:
+        case "0":
+            return eval(f"Hour.H{text[1]}")
+        case "1":
+            return eval(f"Hour.H{text}")
+        case "2":
+            match text[1]:
+                case "0" | "1" | "2" | "3":
+                    return eval(f"Hour.H{text}")
+    raise ValueError("parseHour error")
+
+            
+def parseMinute(text: str) -> Minute:
+    # Parses the minute from a given text and returns the corresponding Minute object
+    match text:
+        case "00":
+            return Minute.M00
+        case "30":
+            return Minute.M30
+    raise ValueError("parseHour error")
+
+
+# Parses the start and end times from a given text and returns them as Time objects
+# Returns a tuple of two Time objects if the text is not "NULL", otherwise returns None
+def parseTime(text: str) -> Tuple[Time, Time] | None:
+    if text != "NULL":
+        start_hour: Hour = parseHour(text[:2])
+        start_min: Minute = parseMinute(text[3:5])
+        end_hour: Hour = parseHour(text[6:8])
+        end_min: Minute = parseMinute(text[9:11])
+        return Time(start_hour, start_min), Time(end_hour, end_min)
+    return None
+#Parses the list of class schedules for each day and returns a list of Class objects
+# Returns a list of Class objects if at least one class is parsed, otherwise returns None
+def parseClasses(days: list[str]) -> list[Class] | None:
+    classes: list[Class] = []
+    for i, val in zip(range(7),days):
+        if i == 0:
+            const = Day.Monday
+        elif i == 1:
+                const = Day.Tuesday
+        elif i == 2:
+                const = Day.Wednesday
+        elif i == 3:
+                const = Day.Thursday
+        elif i == 4:
+                const = Day.Friday
+        elif i == 5:
+                const = Day.Saturday
+        elif i == 6:
+                const = Day.Sunday
+        if (interval := parseTime(val)) is not None:
+            classes.append(Class(const, interval[0], interval[1]))
+    if classes:
+        return classes
+    return None
+
+# Reads a subject file from the given filepath and extracts the subject data
+# Returns a list of Subject objects containing the subject name, professor, key, and class schedules
+def readSubjectFile(filepath: str) -> list[Subject] | None:
+    subjects : list[Subject] = []
+    with open(filepath, mode="r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            name, prof, key = row[0], row[1], row[2]
+            classes = parseClasses(row[3:])
+            if classes is not None:
+                subjects.append(Subject(name, prof, key, classes))
+    if subjects:
+        return subjects
+    return None
 
 # tests
 def main() -> None:
