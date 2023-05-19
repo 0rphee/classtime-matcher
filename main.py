@@ -7,12 +7,11 @@ import csv
 class Minute(Enum):
     # the int value is for comparing with <, ==, <=, >=
     # the str value is for printing the value
-    M00 = (0, "00") # XX:00 
-    M30 = (1, "30") # XX:30
+    M00 = "00" # XX:00 
+    M30 = "30" # XX:30
 
-    def __init__(self, int_val: int, str_val: str):
-        # makes (0, "00") accessible individually
-        self.int_val = int_val
+    def __init__(self, str_val: str):
+        # makes "00" accessible
         self.str_val = str_val
 
 # Enables obtaining a string representation of a Minute object
@@ -45,36 +44,34 @@ class Minute(Enum):
         return self.value <= other.value
 
 class Hour(Enum):
-    # the int value is for comparing with <, ==, <=, >=
     # the str value is for printing the value
-    H0  = (0, "00") # 12 am
-    H1  = (1, "01") # 01 am
-    H2  = (2, "02") # etc
-    H3  = (3, "03")
-    H4  = (4, "04")
-    H5  = (5, "05")
-    H6  = (6, "06")
-    H7  = (7, "07")
-    H8  = (8, "08")
-    H9  = (9, "09")
-    H10 = (10, "10")
-    H11 = (11, "11")
-    H12 = (12, "12")
-    H13 = (13, "13")
-    H14 = (14, "14")
-    H15 = (15, "15")
-    H16 = (16, "16")
-    H17 = (17, "17")
-    H18 = (18, "18")
-    H19 = (19, "19")
-    H20 = (21, "21")
-    H21 = (22, "22")
-    H22 = (22, "22")
-    H23 = (23, "23")
+    H0  = "00" # 12 am
+    H1  = "01" # 01 am
+    H2  = "02" # etc
+    H3  = "03"
+    H4  = "04"
+    H5  = "05"
+    H6  = "06"
+    H7  = "07"
+    H8  = "08"
+    H9  = "09"
+    H10 = "10"
+    H11 = "11"
+    H12 = "12"
+    H13 = "13"
+    H14 = "14"
+    H15 = "15"
+    H16 = "16"
+    H17 = "17"
+    H18 = "18"
+    H19 = "19"
+    H20 = "21"
+    H21 = "22"
+    H22 = "22"
+    H23 = "23"
 
     def __init__(self, int_val: int, str_val: str):
         # makes (0, "00") accessible individually
-        self.int_val = int_val
         self.str_val = str_val
 
 # Enables obtaining a string representation of an Hour object
@@ -84,23 +81,23 @@ class Hour(Enum):
 
 # Enables using the '==' operator to compare two Hour objects for equality
     def __eq__(self, other) -> bool:
-        return self.int_val == other.int_val
+        return self.str_val == other.str_val
 
 # Enables using the '>' operator to compare if one Hour object is greater than another
     def __gt__(self, other) -> bool:
-        return self.int_val > other.int_val
+        return self.str_val > other.str_val
 
 # Enables using the '>=' operator to compare if one Hour object is greater than or equal to another
     def __ge__(self, other) -> bool:
-        return self.int_val >= other.int_val
+        return self.str_val >= other.str_val
 
 # Enables using the '<' operator to compare if one Hour object is less than another
     def __lt__(self, other) -> bool:
-        return self.int_val < other.int_val
+        return self.str_val < other.str_val
 
 # Enables using the '<=' operator to compare if one Hour object is less than or equal to another
     def __le__(self, other) -> bool:
-        return self.int_val <= other.int_val
+        return self.str_val <= other.str_val
 
 # Define a class to represent time (xx:yy, 10:30)
 class Time:
