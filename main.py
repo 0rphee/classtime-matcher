@@ -246,17 +246,17 @@ def parseClasses(days: list[str]) -> list[Class] | None:
         if i == 0:
             const = Day.Monday
         elif i == 1:
-                const = Day.Tuesday
+            const = Day.Tuesday
         elif i == 2:
-                const = Day.Wednesday
+            const = Day.Wednesday
         elif i == 3:
-                const = Day.Thursday
+            const = Day.Thursday
         elif i == 4:
-                const = Day.Friday
+            const = Day.Friday
         elif i == 5:
-                const = Day.Saturday
+            const = Day.Saturday
         elif i == 6:
-                const = Day.Sunday
+            const = Day.Sunday
         if (interval := parseTime(val)) is not None:
             classes.append(Class(const, interval[0], interval[1]))
     if classes:
