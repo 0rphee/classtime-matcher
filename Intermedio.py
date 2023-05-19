@@ -12,7 +12,7 @@ opcion = 0
 val = -1
 validacion = "S"
 
-while(opcion != (1 or 2 or 3)):
+while(opcion != 3):
 
     #Borrar pantalla
     os.system("cls")
@@ -30,6 +30,7 @@ while(opcion != (1 or 2 or 3)):
 
         print("Ingrese la informacion de las materias\n")
         #Se ingresa la informacion de las materias
+        validacion = "S"
         while(validacion == "S"):
             #Añadir materia
             temp_list = []
@@ -50,12 +51,11 @@ while(opcion != (1 or 2 or 3)):
 
             #Coninuar añaadiendo materias
             print("\nDesea añadir otra materia? (S/N) ")
-            if(input() == "S"):
+            if(input().upper == "S"):
                 validacion = "S"
             else:
                 validacion = "N"
-                
-        break
+                continue
     
 
     elif(opcion == 2):
@@ -76,7 +76,7 @@ while(opcion != (1 or 2 or 3)):
                 f.write("\n")
             os.system("pause")
             continue
-        break
+        
 
     elif(opcion == 3):
         print("Gracias por usar el generador de archivo intermedio")
@@ -87,4 +87,4 @@ while(opcion != (1 or 2 or 3)):
         print("Opcion invalida")
         os.system("pause")
         continue
-    break
+    
