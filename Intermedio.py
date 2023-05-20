@@ -4,13 +4,43 @@
 #comerialización,alan,01,11:30-13:00,NULL,15:30-17:00,NULL,NULL,NULL,NULL
 
 import os
+import main
+import re
+
+# Metodos
+time_pattern = re.compile(r'^\d{2}:\d{2}-\d{2}:\d{2}$')
+days_of_week = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+
+def validate_time_input(day):
+    while True:
+        time_input = input(day + ": ")
+        if time_input.upper() == "NULL":
+            return time_input
+        elif time_pattern.match(time_input):
+            return time_input
+        else:
+            print("Formato de tiempo inválido. Intente nuevamente.")
+
+def escribir_archivo(lista):
+    #Abrir archivo csv
+    f = open("intermedio.csv", "a")
+    #Escribir en el archivo csv
+    for i, elemento in enumerate(lista):
+        # separar elementos de la lista por comas excepto el ultimo
+        f.write(elemento)
+        if i != len(lista) - 1:
+            f.write(",")
+    f.write("\n")
+    #Cerrar archivo csv
+    f.close()
+    print(f"\nMateria {lista[2]} añadida con exito")
+
 # Menu
 
-materialist = [["Materia", "Profesor", "Clave", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]]
+materialist = []
 
 opcion = 0
 val = -1
-validacion = "S"
 
 while(opcion != 3):
 
@@ -19,7 +49,7 @@ while(opcion != 3):
 
     print("Bienvenido al generador de archivo intermedio\n")
     print("1- Ingresar Materias")
-    print("2- Generar Archivo Intermedio")
+    print("2- Ver materias ingresadas")
     print("3- Salir")
 
     opcion = int(input("Ingrese una opcion: "))
@@ -38,45 +68,34 @@ while(opcion != 3):
             temp_list.append(input("Ingrese el nombre del profesor: "))
             temp_list.append(input("Ingrese la clave de la materia: "))
             print('\nIngrese el horario de la materia ( 00:00-00:00 || NULL )\n')
-            temp_list.append(input("Lunes: "))
-            temp_list.append(input("Martes: "))
-            temp_list.append(input("Miercoles: "))
-            temp_list.append(input("Jueves: "))
-            temp_list.append(input("Viernes: "))
-            temp_list.append(input("Sabado: "))
-            temp_list.append(input("Domingo: "))
+            # Metodo de validacion de tiempo para los horarios de las materias
+            for day in days_of_week:
+                temp_list.append(validate_time_input(day))
             materialist.append(temp_list)
-            print("\nMateria añadida con exito")
+            #Generar archivo intermedio
+            escribir_archivo(temp_list)
+            #Borrar pantalla
+            os.system("cls")
             val = 1
-
             #Coninuar añaadiendo materias
             print("\nDesea añadir otra materia? (S/N) ")
-            if(input().upper == "S"):
-                validacion = "S"
-            else:
-                validacion = "N"
-                continue
-    
-
+            validacion = input().upper()
+            
     elif(opcion == 2):
         if(val == -1):
             print("No se han ingresado materias")
             os.system("pause")
             continue
         else:
-            print("Generando archivo intermedio...")
-            #Generar archivo intermedio
-            #Abrir archivo
-            f = open("Intermedio.txt", "w")
-            #Escribir en el archivo
-            for i in range(len(materialist)):
-                for j in range(10):
-                    f.write(materialist[i][j])
-                    f.write(",")
-                f.write("\n")
+            #Borrar pantalla
+            os.system("cls")
+
+            print("Materias ingresadas\n")
+            #Mostrar materias ingresadas
+            for materia in materialist:
+                print(f"{materia} \n")
             os.system("pause")
             continue
-        
 
     elif(opcion == 3):
         print("Gracias por usar el generador de archivo intermedio")
