@@ -3,6 +3,7 @@
 #materia,profesor,clave,lunes,martes,jueves,viernes,sabado,domingo
 #comerialización,alan,01,11:30-13:00,NULL,15:30-17:00,NULL,NULL,NULL,NULL
 
+import sys
 import os
 import main
 import re
@@ -36,74 +37,86 @@ def escribir_archivo(lista):
     print(f"\nMateria {lista[2]} añadida con exito")
 
 # Menu
+def ingreso_materias():
+    materialist = []
 
-materialist = []
+    opcion = 0
+    val = -1
 
-opcion = 0
-val = -1
+    while(opcion != 3):
 
-while(opcion != 3):
-
-    #Borrar pantalla
-    os.system("cls")
-
-    print("Bienvenido al generador de archivo intermedio\n")
-    print("1- Ingresar Materias")
-    print("2- Ver materias ingresadas")
-    print("3- Salir")
-
-    opcion = int(input("Ingrese una opcion: "))
-
-    if(opcion == 1):
         #Borrar pantalla
-        os.system("cls")
-
-        print("Ingrese la informacion de las materias\n")
-        #Se ingresa la informacion de las materias
-        validacion = "S"
-        while(validacion == "S"):
-            #Añadir materia
-            temp_list = []
-            temp_list.append(input("\nIngrese el nombre de la materia: "))
-            temp_list.append(input("Ingrese el nombre del profesor: "))
-            temp_list.append(input("Ingrese la clave de la materia: "))
-            print('\nIngrese el horario de la materia ( 00:00-00:00 || NULL )\n')
-            # Metodo de validacion de tiempo para los horarios de las materias
-            for day in days_of_week:
-                temp_list.append(validate_time_input(day))
-            materialist.append(temp_list)
-            #Generar archivo intermedio
-            escribir_archivo(temp_list)
-            #Borrar pantalla
+        if sys.platform == "win32":
             os.system("cls")
-            val = 1
-            #Coninuar añaadiendo materias
-            print("\nDesea añadir otra materia? (S/N) ")
-            validacion = input().upper()
-            
-    elif(opcion == 2):
-        if(val == -1):
-            print("No se han ingresado materias")
-            os.system("pause")
-            continue
+
+        print("Bienvenido al generador de archivo intermedio\n")
+        print("1- Ingresar Materias")
+        print("2- Ver materias ingresadas")
+        print("3- Salir")
+
+        opcion = int(input("Ingrese una opcion: "))
+
+        if(opcion == 1):
+            #Borrar pantalla
+
+            if sys.platform == "win32":            
+                os.system("cls")
+
+            print("Ingrese la informacion de las materias\n")
+            #Se ingresa la informacion de las materias
+            validacion = "S"
+            while(validacion == "S"):
+                #Añadir materia
+                temp_list = []
+                temp_list.append(input("\nIngrese el nombre de la materia: "))
+                temp_list.append(input("Ingrese el nombre del profesor: "))
+                temp_list.append(input("Ingrese la clave de la materia: "))
+                print('\nIngrese el horario de la materia ( 00:00-00:00 || NULL )\n')
+                # Metodo de validacion de tiempo para los horarios de las materias
+                for day in days_of_week:
+                    temp_list.append(validate_time_input(day))
+                materialist.append(temp_list)
+                #Generar archivo intermedio
+                escribir_archivo(temp_list)
+                #Borrar pantalla
+                os.system("cls")
+                val = 1
+                #Coninuar añaadiendo materias
+                print("\nDesea añadir otra materia? (S/N) ")
+                validacion = input().upper()
+        
+        elif(opcion == 2):
+            if(val == -1):
+                print("No se han ingresado materias")
+                if sys.platform == "win32":
+                    os.system("pause")
+                continue
+            else:
+                #Borrar pantalla
+                if sys.platform == "win32":
+                    os.system("cls")
+
+                print("Materias ingresadas\n")
+                #Mostrar materias ingresadas
+                for materia in materialist:
+                    print(f"{materia} \n")
+                os.system("pause")
+                continue
+
+        elif(opcion == 3):
+            print("Gracias por usar el generador de archivo intermedio")
+            if sys.platform == "win32":
+                os.system("pause")
+            exit()
+
         else:
-            #Borrar pantalla
-            os.system("cls")
-
-            print("Materias ingresadas\n")
-            #Mostrar materias ingresadas
-            for materia in materialist:
-                print(f"{materia} \n")
-            os.system("pause")
+            print("Opcion invalida")
+            if sys.platform == "win32":
+                os.system("pause")
             continue
 
-    elif(opcion == 3):
-        print("Gracias por usar el generador de archivo intermedio")
-        os.system("pause")
-        exit()
+def main_intermedio():
+    ingreso_materias()
 
-    else:
-        print("Opcion invalida")
-        os.system("pause")
-        continue
-    
+if __name__ == "__main__":
+       main_intermedio()
