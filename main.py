@@ -70,7 +70,7 @@ class Hour(Enum):
     H22 = "22"
     H23 = "23"
 
-    def __init__(self, int_val: int, str_val: str):
+    def __init__(self, str_val: str):
         # makes (0, "00") accessible individually
         self.str_val = str_val
 
