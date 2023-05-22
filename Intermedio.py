@@ -132,7 +132,7 @@ if __name__ == "__main__":
        main_intermedio()
 
 #Create a DataFrame with the information typed by the user
-df = pd.DataFrame(materialist, columns=["Materia", "Profesor", "Clave"] + days_of_week)
+df = pd.DataFrame(["Lunes", "Martes", "Mércoles", "Jueves", "Viernes"], columns=["Materia", "Profesor", "Clave"] + days_of_week)
 
 #Show the DataFrame 
 df = df[["Materia", "Profesor", "Clave"] + days_of_week]
