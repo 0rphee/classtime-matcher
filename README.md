@@ -1,3 +1,9 @@
+Para correr el programa usamos
+
+```
+python3 main.py
+```
+
 Para clonar el proyecto, pueden usar [Github Desktop](https://desktop.github.com/).
 
 Si gustan, les recomiendo ver este [video](https://www.youtube.com/watch?v=8Dd7KRpKeaE) para conocer mejor como trabajar con git y github.
