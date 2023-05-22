@@ -229,7 +229,7 @@ def parseMinute(text: str) -> Minute:
 # Parses the start and end times from a given text and returns them as Time objects
 # Returns a tuple of two Time objects if the text is not "NULL", otherwise returns None
 def parseTime(text: str) -> Tuple[Time, Time] | None:
-    if text != "NULL":
+    if text.upper() != "NULL":
         start_hour: Hour = parseHour(text[:2])
         start_min: Minute = parseMinute(text[3:5])
         end_hour: Hour = parseHour(text[6:8])
