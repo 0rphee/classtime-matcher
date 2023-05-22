@@ -337,17 +337,7 @@ def schedule_is_valid(schedule: list[Subject]) -> bool:
 
 # tests
 def main() -> None:
-    subjects = readSubjectFile("intermedio.csv")
-    c = 0
-    for valid_schedule in validate_schedules(subjects):
-        c += 1
-        print(f"\nschedule {c}:")
-
-        for subj in valid_schedule:
-            print(subj)
-        
-
-
+    Intermedio.main_intermedio()        
 
 # execute ONLY if the module is not imported: 
 # ex. python3 main.py
