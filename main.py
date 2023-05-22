@@ -282,37 +282,49 @@ def readSubjectFile(filepath: str) -> list[Subject] | None:
         return subjects
     return None
 
+
+def separate_subjects_by_name(subjects):
+    subjects_dict = {}
+    
+    for subject in subjects:
+        if subject.name in subjects_dict:
+            subjects_dict[subject.name].append(subject)
+        else:
+            subjects_dict[subject.name] = [subject]
+    
+    return list(subjects_dict.values())
+
 # Possible schedules generated from the classes. This will be done with the itertools function
 # called 'product()' which is going to give us all the possible iterations of the schedules available.
 # To validate that each schedule is valid, the function 'classesOverlap' is called to check if
 # each possible pair of classes overlap.
 
-# Creates a class which is going to produce all the possile iterations of the schedules posible.
-def possibleIterations(subjects: list[Subject]) -> list[list[Subject]] | None:
-    # Creates a list of all the possible iterations of the schedules
-    possibleSchedules = list(itertools.product(*[subject.classes for subject in subjects]))
-    # Checks if the schedules overlap
-    possibleSchedules = [schedule for schedule in possibleSchedules if not any(classesOverlap(*classes) for classes in itertools.combinations(schedule, 2))]
-    # Returns a list of lists of Subject objects if at least one schedule is possible, otherwise returns None
-    if possibleSchedules:
-        return possibleSchedules
-    return None
-
-# Finally, it will return a list and show of all the possible schedules which do not overlap.
-# Prints all the possible schedules
-def printPossibleSchedules(subjects: list[Subject]) -> None:
-    if (possibleSchedules := possibleIterations(subjects)) is not None:
-        for schedule in possibleSchedules:
-            print(*schedule, sep="\n")
-    else:
-        print("No possible schedules")
-
+def validate_schedules(subjects: list[Subject]) -> list[list[Subject]]:
+    possible_schedules = itertools.product(*separate_subjects_by_name(subjects))
+    valid_schedules = []
+    for schedule in possible_schedules:
+        if schedule_is_valid(schedule):
+            valid_schedules.append(schedule)
+    return valid_schedules
         
+def schedule_is_valid(schedule: list[Subject]) -> bool:
+    pairs = list(itertools.combinations(schedule, 2)) 
+    for subj1, subj2 in pairs:
+        if subjectsOverlap(subj1, subj2):
+            return False
+    return True
+
 # tests
 def main() -> None:
-    for subj in readSubjectFile("intermedio.csv"):
-        print(subj)
+    subjects = readSubjectFile("intermedio.csv")
+    c = 0
+    for valid_schedule in validate_schedules(subjects):
+        c += 1
+        print(f"\nschedule {c}:")
 
+        for subj in valid_schedule:
+            print(subj)
+        
 
 # execute ONLY if the module is not imported:
 # ex. python3 main.py
