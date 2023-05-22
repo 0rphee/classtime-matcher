@@ -78,7 +78,8 @@ def ingreso_materias():
                 #Generar archivo intermedio
                 escribir_archivo(temp_list)
                 #Borrar pantalla
-                os.system("cls")
+                if sys.platform == "win32":
+                    os.system("cls")
                 val = 1
                 #Coninuar añaadiendo materias
                 print("\nDesea añadir otra materia? (S/N) ")
@@ -99,7 +100,8 @@ def ingreso_materias():
                 #Mostrar materias ingresadas
                 for materia in materialist:
                     print(f"{materia} \n")
-                os.system("pause")
+                if sys.platform == "win32":
+                    os.system("pause")
                 continue
 
         elif(opcion == 3):
