@@ -165,7 +165,7 @@ problema, se resolverán los conflictos)\n""")
             continue
 
 # Creates DataFrame with the information of each class organized by columns
-def crear_dataframe(materias: list[main.Subject]):
+def crear_dataframe(materias): # materias: list[main.Subject]
     materias = map(lambda x: x.format_subject(), materias)
     columnas = ["MATERIA", "PROFESOR", "ID DE CLASE", "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"]
     df = pd.DataFrame(materias, columns=columnas)
