@@ -48,7 +48,14 @@ def ingreso_materias():
         if sys.platform == "win32":
             os.system("cls")
 
-        print("Bienvenido a ClasstimeMatcher\n")
+        print("""Bienvenido a ClasstimeMatcher\n
+Con este programa podrás validar las materias que cursarás en tu 
+próximo semestre. Ingresa todas las clases que te interesen, y 
+ClasstimeMatcher generará todos los horarios válidos para cursar 
+todas las materias que te interesan. 
+
+(Puedes ingresar la misma materia con múltiples profesores sin 
+problema, se resolverán los conflictos)\n""")
         print("1- Ingresar Materias")
         print("2- Ver materias ingresadas")
         print("3- Salir")
