@@ -12,10 +12,9 @@ import pandas as pd
 # Metodos
 time_pattern = re.compile(r'^\d{2}:\d{2}-\d{2}:\d{2}$')
 days_of_week = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-
 def validate_time_input(day):
     while True:
-        time_input = input(day + ": ")
+        time_input = input(day + ": ").strip()
         if time_input.upper() == "NULL":
             return time_input
         elif time_pattern.match(time_input):
@@ -75,9 +74,9 @@ problema, se resolverán los conflictos)\n""")
             while(validacion == "S"):
                 #Añadir materia
                 temp_list = []
-                temp_list.append(input("\nIngrese el nombre de la materia: "))
-                temp_list.append(input("Ingrese el nombre del profesor: "))
-                temp_list.append(input("Ingrese la clave de la materia: "))
+                temp_list.append(input("\nIngrese el nombre de la materia: ").strip())
+                temp_list.append(input("Ingrese el nombre del profesor: ").strip())
+                temp_list.append(input("Ingrese la clave de la materia: ").strip())
                 print('\nIngrese el horario de la materia ( 00:00-00:00 || NULL )\n')
                 # Metodo de validacion de tiempo para los horarios de las materias
                 for day in days_of_week:
@@ -90,7 +89,7 @@ problema, se resolverán los conflictos)\n""")
                     os.system("cls")
                 #Coninuar añaadiendo materias
                 print("\nDesea añadir otra materia? (S/N) ")
-                validacion = input().upper()
+                validacion = input().upper().strip()
         
         elif(opcion == 2):
             try:
