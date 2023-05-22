@@ -152,7 +152,7 @@ problema, se resolverán los conflictos)\n""")
             if sys.platform == "win32":
                 os.system("cls")
             #Exit the program
-            print("Gracias por Classtime-Matcher")
+            print("Gracias por susar Classtime-Matcher")
             if sys.platform == "win32":
                 os.system("pause")
             exit()
