@@ -24,16 +24,15 @@ def validate_time_input(day):
 
 def escribir_archivo(lista):
     #Abrir archivo csv
-    f = open("intermedio.csv", "a")
-    #Escribir en el archivo csv
-    for i, elemento in enumerate(lista):
-        # separar elementos de la lista por comas excepto el ultimo
-        f.write(elemento)
-        if i != len(lista) - 1:
-            f.write(",")
-    f.write("\n")
-    #Cerrar archivo csv
-    f.close()
+    with open("intermedio.csv", "a") as f:
+        #Escribir en el archivo csv
+        for i, elemento in enumerate(lista):
+            # separar elementos de la lista por comas excepto el ultimo
+            f.write(elemento)
+            if i != len(lista) - 1:
+                f.write(",")
+        f.write("\n")
+        #Cerrar archivo csv
     print(f"\nMateria {lista[2]} añadida con exito")
 
 # Menu
@@ -79,7 +78,8 @@ def ingreso_materias():
                 #Generar archivo intermedio
                 escribir_archivo(temp_list)
                 #Borrar pantalla
-                os.system("cls")
+                if sys.platform == "win32":
+                    os.system("cls")
                 val = 1
                 #Coninuar añaadiendo materias
                 print("\nDesea añadir otra materia? (S/N) ")
@@ -100,7 +100,8 @@ def ingreso_materias():
                 #Mostrar materias ingresadas
                 for materia in materialist:
                     print(f"{materia} \n")
-                os.system("pause")
+                if sys.platform == "win32":
+                    os.system("pause")
                 continue
 
         elif(opcion == 3):

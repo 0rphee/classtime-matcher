@@ -1,3 +1,4 @@
+import itertools
 from enum import Enum
 from typing import Tuple
 import csv
@@ -148,13 +149,13 @@ class Time:
 
 # Define an enumeration for days
 class Day(Enum):
-    Monday    = "Monday"
-    Tuesday   = "Tuesday"
-    Wednesday = "Wednesday"
-    Thursday  = "Thursday"
-    Friday    = "Friday"
-    Saturday  = "Saturday"
-    Sunday    = "Sunday"
+    Monday    = "Lunes"
+    Tuesday   = "Martes"
+    Wednesday = "Miércoles"
+    Thursday  = "Jueves"
+    Friday    = "Viernes"
+    Saturday  = "Sábado"
+    Sunday    = "Domingo"
     def __init__(self, str_val: str):
         self.str_val = str_val
     def __str__(self) -> str:
@@ -168,7 +169,7 @@ class Class:
         self.start_time = start_time
         self.end_time = end_time
     def __str__(self) -> str:
-        return f"{self.day.str_val}: {self.start_time} - {self.end_time}"
+        return f"{self.day.str_val}: {self.start_time}-{self.end_time}"
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
 class Subject:
@@ -178,10 +179,10 @@ class Subject:
         self.key = key
         self.classes = classes
     def __str__(self) -> str:
-        return f"{self.name}, {self.professor}, {self.key}, [{','.join(map(lambda x: x.__str__(), self.classes))}]"
+        return f"{self.name}, {self.professor}, {self.key}, [{', '.join(map(lambda x: x.__str__(), self.classes))}]"
 
 # Check if two classes overlap in time 
-def classesOverlap(class1: Class, class2: Class):
+def classesOverlap(class1: Class, class2: Class) -> bool:
 
     # checks if the classes are on the same day: Monday - Monday, etc.
     if class1.day is class2.day:
@@ -201,6 +202,12 @@ def classesOverlap(class1: Class, class2: Class):
     else:
         return False
 
+def subjectsOverlap(subj1: Subject, subj2: Subject) -> bool:
+    for class1, class2 in itertools.product(subj1.classes, subj2.classes):
+        if classesOverlap(class1,class2):
+            return True
+    return False
+
 def parseHour(text: str) -> Hour:
     # Parses the hour from a given text and returns the corresponding Hour object
     match text[0]:
@@ -212,7 +219,7 @@ def parseHour(text: str) -> Hour:
             match text[1]:
                 case "0" | "1" | "2" | "3":
                     return eval(f"Hour.H{text}")
-    raise ValueError("parseHour error")
+    raise ValueError(f"parseHour error: {text}")
 
             
 def parseMinute(text: str) -> Minute:
@@ -228,7 +235,7 @@ def parseMinute(text: str) -> Minute:
 # Parses the start and end times from a given text and returns them as Time objects
 # Returns a tuple of two Time objects if the text is not "NULL", otherwise returns None
 def parseTime(text: str) -> Tuple[Time, Time] | None:
-    if text != "NULL":
+    if text.upper() != "NULL":
         start_hour: Hour = parseHour(text[:2])
         start_min: Minute = parseMinute(text[3:5])
         end_hour: Hour = parseHour(text[6:8])
@@ -275,19 +282,49 @@ def readSubjectFile(filepath: str) -> list[Subject] | None:
         return subjects
     return None
 
+
+def separate_subjects_by_name(subjects):
+    subjects_dict = {}
+    
+    for subject in subjects:
+        if subject.name in subjects_dict:
+            subjects_dict[subject.name].append(subject)
+        else:
+            subjects_dict[subject.name] = [subject]
+    
+    return list(subjects_dict.values())
+
+# Possible schedules generated from the classes. This will be done with the itertools function
+# called 'product()' which is going to give us all the possible iterations of the schedules available.
+# To validate that each schedule is valid, the function 'classesOverlap' is called to check if
+# each possible pair of classes overlap.
+
+def validate_schedules(subjects: list[Subject]) -> list[list[Subject]]:
+    possible_schedules = itertools.product(*separate_subjects_by_name(subjects))
+    valid_schedules = []
+    for schedule in possible_schedules:
+        if schedule_is_valid(schedule):
+            valid_schedules.append(schedule)
+    return valid_schedules
+        
+def schedule_is_valid(schedule: list[Subject]) -> bool:
+    pairs = list(itertools.combinations(schedule, 2)) 
+    for subj1, subj2 in pairs:
+        if subjectsOverlap(subj1, subj2):
+            return False
+    return True
+
 # tests
 def main() -> None:
-    print(Class(Day.Monday, Time(Hour.H10, Minute.M00), Time(Hour.H11, Minute.M30))) # testing
-    print(Hour.H1.str_val)
-    print(Hour.H0 < Hour.H1)
-    print(Hour.H0, Hour.H0 >= Hour.H0, Hour.H0)
-    print(Time(Hour.H10, Minute.M30))
-    print(Time(Hour.H10, Minute.M00) > Time(Hour.H11, Minute.M30))
-    print("Classes overlap ", classesOverlap(
-        Class(Day.Friday, Time(Hour.H10, Minute.M00), Time(Hour.H11, Minute.M30)),
-        Class(Day.Friday, Time(Hour.H0, Minute.M30), Time(Hour.H11, Minute.M30)),
-    ))
+    subjects = readSubjectFile("intermedio.csv")
+    c = 0
+    for valid_schedule in validate_schedules(subjects):
+        c += 1
+        print(f"\nschedule {c}:")
 
+        for subj in valid_schedule:
+            print(subj)
+        
 
 # execute ONLY if the module is not imported:
 # ex. python3 main.py
