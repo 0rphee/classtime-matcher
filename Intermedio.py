@@ -49,7 +49,7 @@ def ingreso_materias():
         if sys.platform == "win32":
             os.system("cls")
 
-        print("Bienvenido al generador de archivo intermedio\n")
+        print("Bienvenido a ClasstimeMatcher\n")
         print("1- Ingresar Materias")
         print("2- Ver materias ingresadas")
         print("3- Salir")
