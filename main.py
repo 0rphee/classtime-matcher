@@ -2,6 +2,7 @@ import itertools
 from enum import Enum
 from typing import Tuple
 import csv
+import Intermedio
 # enum docs: https://docs.python.org/3/howto/enum.html#when-to-use-new-vs-init
 # csv docs: https://docs.python.org/3/library/csv.html
 
@@ -169,8 +170,7 @@ class Class:
         self.start_time = start_time
         self.end_time = end_time
     def __str__(self) -> str:
-        txt = f"   {self.day}: {self.start_time}-{self.end_time}"
-        return txt
+        return f"   {self.day}: {self.start_time}-{self.end_time}"
         # return f"{self.day.str_val}: {self.start_time}-{self.end_time}"
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
@@ -185,16 +185,26 @@ class Subject:
 Materia: {self.name}
 Profesor: {self.professor}
 ID: {self.key}
-Classes:
-"""
+Classes:"""
         for classs in self.classes:
-            txt += f"{classs}\n"
+            txt += f"\n{classs}"
         return txt
-        # return f"{self.name}, {self.professor}, {self.key}, [{', '.join(map(lambda x: x.__str__(), self.classes))}]"
+
+    def format_subject(self) -> list[str]:
+        result = [self.name, self.professor, self.key, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL"]
+        for classs in self.classes:
+            formatted_time = f"{classs.start_time}-{classs.end_time}"
+            if classs.day is Day.Monday: result[3] = formatted_time
+            elif classs.day is Day.Tuesday: result[4] = formatted_time
+            elif classs.day is Day.Wednesday: result[5] = formatted_time
+            elif classs.day is Day.Thursday: result[6] = formatted_time
+            elif classs.day is Day.Friday: result[7] = formatted_time
+            elif classs.day is Day.Saturday: result[8] = formatted_time
+            elif classs.day is Day.Sunday: result[9] = formatted_time
+        return result
 
 # Check if two classes overlap in time 
 def classesOverlap(class1: Class, class2: Class) -> bool:
-
     # checks if the classes are on the same day: Monday - Monday, etc.
     if class1.day is class2.day:
         # if they start at the same time and end at the same time, they overlap
