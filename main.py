@@ -1,3 +1,4 @@
+import itertools
 from enum import Enum
 from typing import Tuple
 import csv
@@ -275,18 +276,36 @@ def readSubjectFile(filepath: str) -> list[Subject] | None:
         return subjects
     return None
 
+# Possible schedules generated from the classes. This will be done with the itertools function
+# called 'product()' which is going to give us all the possible iterations of the schedules available.
+# To validate that each schedule is valid, the function 'classesOverlap' is called to check if
+# each possible pair of classes overlap.
+
+# Creates a class which is going to produce all the possile iterations of the schedules posible.
+def possibleIterations(subjects: list[Subject]) -> list[list[Subject]] | None:
+    # Creates a list of all the possible iterations of the schedules
+    possibleSchedules = list(itertools.product(*[subject.classes for subject in subjects]))
+    # Checks if the schedules overlap
+    possibleSchedules = [schedule for schedule in possibleSchedules if not any(classesOverlap(*classes) for classes in itertools.combinations(schedule, 2))]
+    # Returns a list of lists of Subject objects if at least one schedule is possible, otherwise returns None
+    if possibleSchedules:
+        return possibleSchedules
+    return None
+
+# Finally, it will return a list and show of all the possible schedules which do not overlap.
+# Prints all the possible schedules
+def printPossibleSchedules(subjects: list[Subject]) -> None:
+    if (possibleSchedules := possibleIterations(subjects)) is not None:
+        for schedule in possibleSchedules:
+            print(*schedule, sep="\n")
+    else:
+        print("No possible schedules")
+
+        
 # tests
 def main() -> None:
-    print(Class(Day.Monday, Time(Hour.H10, Minute.M00), Time(Hour.H11, Minute.M30))) # testing
-    print(Hour.H1.str_val)
-    print(Hour.H0 < Hour.H1)
-    print(Hour.H0, Hour.H0 >= Hour.H0, Hour.H0)
-    print(Time(Hour.H10, Minute.M30))
-    print(Time(Hour.H10, Minute.M00) > Time(Hour.H11, Minute.M30))
-    print("Classes overlap ", classesOverlap(
-        Class(Day.Friday, Time(Hour.H10, Minute.M00), Time(Hour.H11, Minute.M30)),
-        Class(Day.Friday, Time(Hour.H0, Minute.M30), Time(Hour.H11, Minute.M30)),
-    ))
+    for subj in readSubjectFile("intermedio.csv"):
+        print(subj)
 
 
 # execute ONLY if the module is not imported:
