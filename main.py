@@ -213,7 +213,7 @@ def parseHour(text: str) -> Hour:
             match text[1]:
                 case "0" | "1" | "2" | "3":
                     return eval(f"Hour.H{text}")
-    raise ValueError("parseHour error")
+    raise ValueError(f"parseHour error: {text}")
 
             
 def parseMinute(text: str) -> Minute:
