@@ -24,16 +24,15 @@ def validate_time_input(day):
 
 def escribir_archivo(lista):
     #Abrir archivo csv
-    f = open("intermedio.csv", "a")
-    #Escribir en el archivo csv
-    for i, elemento in enumerate(lista):
-        # separar elementos de la lista por comas excepto el ultimo
-        f.write(elemento)
-        if i != len(lista) - 1:
-            f.write(",")
-    f.write("\n")
-    #Cerrar archivo csv
-    f.close()
+    with open("intermedio.csv", "a") as f:
+        #Escribir en el archivo csv
+        for i, elemento in enumerate(lista):
+            # separar elementos de la lista por comas excepto el ultimo
+            f.write(elemento)
+            if i != len(lista) - 1:
+                f.write(",")
+        f.write("\n")
+        #Cerrar archivo csv
     print(f"\nMateria {lista[2]} añadida con exito")
 
 # Menu
