@@ -1,4 +1,4 @@
-# Generador de archivo intermedio (Lectura de Datos)
+# ClassTime-Matcher
 
 #materia,profesor,clave,lunes,martes,jueves,viernes,sabado,domingo
 #comerialización,alan,01,11:30-13:00,NULL,15:30-17:00,NULL,NULL,NULL,NULL
@@ -9,9 +9,11 @@ import main
 import re
 import pandas as pd
 
-# Metodos
+# Regex for time validation
 time_pattern = re.compile(r'^\d{2}:\d{2}-\d{2}:\d{2}$')
 days_of_week = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+
+# Validate time input
 def validate_time_input(day):
     while True:
         time_input = input(day + ": ").strip()
@@ -22,20 +24,20 @@ def validate_time_input(day):
         else:
             print("Formato de tiempo inválido. Intente nuevamente.")
 
+# Method tp write the intermediate file
 def escribir_archivo(lista):
-    #Abrir archivo csv
+    #Open csv file
     with open("intermedio.csv", "a") as f:
-        #Escribir en el archivo csv
+        #Write the list in the csv file
         for i, elemento in enumerate(lista):
-            # separar elementos de la lista por comas excepto el ultimo
+            # Split the elements of the list by commas except the last one
             f.write(elemento)
             if i != len(lista) - 1:
                 f.write(",")
         f.write("\n")
-        #Cerrar archivo csv
+        #Close the file
     print(f"\nMateria {lista[2]} añadida con exito")
 
-# Menu
 def ingreso_materias():
     materialist = []
 
@@ -52,9 +54,11 @@ problema, se resolverán los conflictos)\n""")
 
     while(opcion != 4):
 
-        #Borrar pantalla
+        #Clear screen
         if sys.platform == "win32":
             os.system("cls")
+
+        #Menu options
         print("1- Ingresar Materias")
         print("2- Ver materias ingresadas")
         print("3- Generar archivos excel con cada horario válido")
@@ -63,36 +67,41 @@ problema, se resolverán los conflictos)\n""")
         opcion = int(input("Ingrese una opcion: "))
 
         if(opcion == 1):
-            #Borrar pantalla
-
+            #Clear screen
             if sys.platform == "win32":            
                 os.system("cls")
 
             print("Ingrese la informacion de las materias\n")
-            #Se ingresa la informacion de las materias
+            #User input of the subjects
             validacion = "S"
             while(validacion == "S"):
-                #Añadir materia
+                #Add the subject to the list
                 temp_list = []
                 temp_list.append(input("\nIngrese el nombre de la materia: ").strip())
                 temp_list.append(input("Ingrese el nombre del profesor: ").strip())
                 temp_list.append(input("Ingrese la clave de la materia: ").strip())
                 print('\nIngrese el horario de la materia ( 00:00-00:00 || NULL )\n')
-                # Metodo de validacion de tiempo para los horarios de las materias
+                # Method to validate the time input
                 for day in days_of_week:
                     temp_list.append(validate_time_input(day))
                 materialist.append(temp_list)
-                #Generar archivo intermedio
+                #Generate the intermediate file
                 escribir_archivo(temp_list)
-                #Borrar pantalla
+                #Clear screen
                 if sys.platform == "win32":
                     os.system("cls")
-                #Coninuar añaadiendo materias
+                #Continue adding subjects
                 print("\nDesea añadir otra materia? (S/N) ")
                 validacion = input().upper().strip()
         
         elif(opcion == 2):
+            #Clear screen
+            if sys.platform == "win32":
+                os.system("cls")
+
+            #show the current added subjects 
             try:
+                #if the file is empty, it will raise an exception
                 subjects = main.readSubjectFile("intermedio.csv")
                 for subj in subjects:
                     print(subj)
@@ -101,10 +110,10 @@ problema, se resolverán los conflictos)\n""")
                 if sys.platform == "win32":
                     os.system("pause")
             else:
-                #Borrar pantalla
+                #Clear screen
                 if sys.platform == "win32":
                     os.system("cls")
-
+                #Show the subjects
                 print("Materias ingresadas\n")
                 #Mostrar materias ingresadas
                 for materia in materialist:
@@ -112,16 +121,24 @@ problema, se resolverán los conflictos)\n""")
                 if sys.platform == "win32":
                     os.system("pause")
                 continue
-        elif opcion == 3:
+
+        elif(opcion == 3):
+            #Clear screen
+            if sys.platform == "win32":
+                os.system("cls")
+            #Generate the excel files with the valid schedules
             try:
+                #Read the subjects from the intermediate file
                 subjects = main.readSubjectFile("intermedio.csv")
                 counter = 0
-
+                #Validate the schedules
                 if (valid_schedules := main.validate_schedules(subjects)):
                     if not os.path.exists("horarios"):
                         os.makedirs("horarios")
+                        #Create the folder to save the excel files
                         print("Creando carpeta para guardar archivos excel: 'horarios'")
                     print()
+                    #Create the excel files
                     for valid_schedule in valid_schedules:
                         counter += 1
                         excel_actual = f'horarios/horario{counter}.xlsx'
@@ -131,20 +148,28 @@ problema, se resolverán los conflictos)\n""")
                         crear_excel(df, excel_actual)
                     print()
                 else:
+                    #Clear screen
+                    if sys.platform == "win32":
+                        os.system("cls")
                     print("No hay horarios válidos con las materias que hay registradas :(")
-
+            #If the file is empty, it will raise an exception
             except FileNotFoundError:
                 print("\nNo se han ingresado materias aún\n")
                 if sys.platform == "win32":
                     os.system("pause")
 
         elif(opcion == 4):
+            #Clear screen
+            if sys.platform == "win32":
+                os.system("cls")
+            #Exit the program
             print("Gracias por usar el generador de archivo intermedio")
             if sys.platform == "win32":
                 os.system("pause")
             exit()
 
         else:
+            #Invalid option selected
             print("Opcion invalida")
             if sys.platform == "win32":
                 os.system("pause")
