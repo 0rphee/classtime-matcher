@@ -149,13 +149,13 @@ class Time:
 
 # Define an enumeration for days
 class Day(Enum):
-    Monday    = "Monday"
-    Tuesday   = "Tuesday"
-    Wednesday = "Wednesday"
-    Thursday  = "Thursday"
-    Friday    = "Friday"
-    Saturday  = "Saturday"
-    Sunday    = "Sunday"
+    Monday    = "Lunes"
+    Tuesday   = "Martes"
+    Wednesday = "Miércoles"
+    Thursday  = "Jueves"
+    Friday    = "Viernes"
+    Saturday  = "Sábado"
+    Sunday    = "Domingo"
     def __init__(self, str_val: str):
         self.str_val = str_val
     def __str__(self) -> str:
@@ -169,7 +169,7 @@ class Class:
         self.start_time = start_time
         self.end_time = end_time
     def __str__(self) -> str:
-        return f"{self.day.str_val}: {self.start_time} - {self.end_time}"
+        return f"{self.day.str_val}: {self.start_time}-{self.end_time}"
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
 class Subject:
@@ -179,7 +179,7 @@ class Subject:
         self.key = key
         self.classes = classes
     def __str__(self) -> str:
-        return f"{self.name}, {self.professor}, {self.key}, [{','.join(map(lambda x: x.__str__(), self.classes))}]"
+        return f"{self.name}, {self.professor}, {self.key}, [{', '.join(map(lambda x: x.__str__(), self.classes))}]"
 
 # Check if two classes overlap in time 
 def classesOverlap(class1: Class, class2: Class):
