@@ -109,17 +109,6 @@ problema, se resolverán los conflictos)\n""")
                 print("\nNo se han ingresado materias\n")
                 if sys.platform == "win32":
                     os.system("pause")
-            else:
-                #Clear screen
-                if sys.platform == "win32":
-                    os.system("cls")
-                #Show the subjects
-                print("Materias ingresadas\n")
-                #Mostrar materias ingresadas
-                for materia in materialist:
-                    print(f"{materia} \n")
-                if sys.platform == "win32":
-                    os.system("pause")
                 continue
 
         elif(opcion == 3):
