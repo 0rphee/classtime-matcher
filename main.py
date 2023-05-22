@@ -169,7 +169,9 @@ class Class:
         self.start_time = start_time
         self.end_time = end_time
     def __str__(self) -> str:
-        return f"{self.day.str_val}: {self.start_time}-{self.end_time}"
+        txt = f"   {self.day}: {self.start_time}-{self.end_time}"
+        return txt
+        # return f"{self.day.str_val}: {self.start_time}-{self.end_time}"
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
 class Subject:
@@ -179,7 +181,16 @@ class Subject:
         self.key = key
         self.classes = classes
     def __str__(self) -> str:
-        return f"{self.name}, {self.professor}, {self.key}, [{', '.join(map(lambda x: x.__str__(), self.classes))}]"
+        txt = f"""
+Materia: {self.name}
+Profesor: {self.professor}
+ID: {self.key}
+Classes:
+"""
+        for classs in self.classes:
+            txt += f"{classs}\n"
+        return txt
+        # return f"{self.name}, {self.professor}, {self.key}, [{', '.join(map(lambda x: x.__str__(), self.classes))}]"
 
 # Check if two classes overlap in time 
 def classesOverlap(class1: Class, class2: Class) -> bool:
