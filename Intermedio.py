@@ -43,7 +43,7 @@ def ingreso_materias():
 
     opcion = 0
 
-    print("""Bienvenido a ClasstimeMatcher\n
+    print("""Bienvenido a Classtime-Matcher\n
 Con este programa podrás validar las materias que cursarás en tu 
 próximo semestre. Ingresa todas las clases que te interesen, y 
 ClasstimeMatcher generará todos los horarios válidos para cursar 
@@ -152,7 +152,7 @@ problema, se resolverán los conflictos)\n""")
             if sys.platform == "win32":
                 os.system("cls")
             #Exit the program
-            print("Gracias por usar el generador de archivo intermedio")
+            print("Gracias por Classtime-Matcher")
             if sys.platform == "win32":
                 os.system("pause")
             exit()
