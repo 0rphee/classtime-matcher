@@ -40,15 +40,8 @@ def ingreso_materias():
     materialist = []
 
     opcion = 0
-    val = -1
 
-    while(opcion != 3):
-
-        #Borrar pantalla
-        if sys.platform == "win32":
-            os.system("cls")
-
-        print("""Bienvenido a ClasstimeMatcher\n
+    print("""Bienvenido a ClasstimeMatcher\n
 Con este programa podrás validar las materias que cursarás en tu 
 próximo semestre. Ingresa todas las clases que te interesen, y 
 ClasstimeMatcher generará todos los horarios válidos para cursar 
@@ -56,6 +49,12 @@ todas las materias que te interesan.
 
 (Puedes ingresar la misma materia con múltiples profesores sin 
 problema, se resolverán los conflictos)\n""")
+
+    while(opcion != 3):
+
+        #Borrar pantalla
+        if sys.platform == "win32":
+            os.system("cls")
         print("1- Ingresar Materias")
         print("2- Ver materias ingresadas")
         print("3- Salir")
@@ -87,17 +86,19 @@ problema, se resolverán los conflictos)\n""")
                 #Borrar pantalla
                 if sys.platform == "win32":
                     os.system("cls")
-                val = 1
                 #Coninuar añaadiendo materias
                 print("\nDesea añadir otra materia? (S/N) ")
                 validacion = input().upper()
         
         elif(opcion == 2):
-            if(val == -1):
-                print("No se han ingresado materias")
+            try:
+                subjects = main.readSubjectFile("intermedio.csv")
+                for subj in subjects:
+                    print("\n",subj)
+            except FileNotFoundError:
+                print("\nNo se han ingresado materias\n")
                 if sys.platform == "win32":
                     os.system("pause")
-                continue
             else:
                 #Borrar pantalla
                 if sys.platform == "win32":
