@@ -182,7 +182,7 @@ class Subject:
         return f"{self.name}, {self.professor}, {self.key}, [{', '.join(map(lambda x: x.__str__(), self.classes))}]"
 
 # Check if two classes overlap in time 
-def classesOverlap(class1: Class, class2: Class):
+def classesOverlap(class1: Class, class2: Class) -> bool:
 
     # checks if the classes are on the same day: Monday - Monday, etc.
     if class1.day is class2.day:
@@ -201,6 +201,12 @@ def classesOverlap(class1: Class, class2: Class):
         return (cond1 | cond2 | cond3 | cond4 | cond5 | cond5) 
     else:
         return False
+
+def subjectsOverlap(subj1: Subject, subj2: Subject) -> bool:
+    for class1, class2 in itertools.product(subj1.classes, subj2.classes):
+        if classesOverlap(class1,class2):
+            return True
+    return False
 
 def parseHour(text: str) -> Hour:
     # Parses the hour from a given text and returns the corresponding Hour object
