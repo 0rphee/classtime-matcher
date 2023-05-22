@@ -51,14 +51,15 @@ todas las materias que te interesan.
 (Puedes ingresar la misma materia con múltiples profesores sin 
 problema, se resolverán los conflictos)\n""")
 
-    while(opcion != 3):
+    while(opcion != 4):
 
         #Borrar pantalla
         if sys.platform == "win32":
             os.system("cls")
         print("1- Ingresar Materias")
         print("2- Ver materias ingresadas")
-        print("3- Salir")
+        print("3- Generar archivos excel con cada horario válido")
+        print("4- Salir")
 
         opcion = int(input("Ingrese una opcion: "))
 
@@ -95,7 +96,7 @@ problema, se resolverán los conflictos)\n""")
             try:
                 subjects = main.readSubjectFile("intermedio.csv")
                 for subj in subjects:
-                    print("\n",subj)
+                    print(subj)
             except FileNotFoundError:
                 print("\nNo se han ingresado materias\n")
                 if sys.platform == "win32":
@@ -112,8 +113,33 @@ problema, se resolverán los conflictos)\n""")
                 if sys.platform == "win32":
                     os.system("pause")
                 continue
+        elif opcion == 3:
+            try:
+                subjects = main.readSubjectFile("intermedio.csv")
+                counter = 0
 
-        elif(opcion == 3):
+                if (valid_schedules := main.validate_schedules(subjects)):
+                    if not os.path.exists("horarios"):
+                        os.makedirs("horarios")
+                        print("Creando carpeta para guardar archivos excel: 'horarios'")
+                    print()
+                    for valid_schedule in valid_schedules:
+                        counter += 1
+                        excel_actual = f'horarios/horario{counter}.xlsx'
+                        print(f"Generando horario {counter} en {excel_actual}")
+
+                        df = crear_dataframe(valid_schedule)
+                        crear_excel(df, excel_actual)
+                    print()
+                else:
+                    print("No hay horarios válidos con las materias que hay registradas :(")
+
+            except FileNotFoundError:
+                print("\nNo se han ingresado materias aún\n")
+                if sys.platform == "win32":
+                    os.system("pause")
+
+        elif(opcion == 4):
             print("Gracias por usar el generador de archivo intermedio")
             if sys.platform == "win32":
                 os.system("pause")
@@ -125,18 +151,20 @@ problema, se resolverán los conflictos)\n""")
                 os.system("pause")
             continue
 
+#Creates DataFrame with the information of each class organized by columns
+def crear_dataframe(materias: list[main.Subject]):
+    materias = map(lambda x: x.format_subject(), materias)
+    columnas = ["MATERIA", "PROFESOR", "ID DE CLASE", "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"]
+    df = pd.DataFrame(materias, columns=columnas)
+    return df
+
+#Creates an Excel file from the DataFrame
+def crear_excel(df, file):
+    #The index column is excluded 
+    df.to_excel(file, index=False)
+
 def main_intermedio():
     ingreso_materias()
 
 if __name__ == "__main__":
-       main_intermedio()
-
-#Create a DataFrame with the information typed by the user
-df = pd.DataFrame(["Lunes", "Martes", "Mércoles", "Jueves", "Viernes"], columns=["Materia", "Profesor", "Clave"] + days_of_week)
-
-#Show the DataFrame 
-df = df[["Materia", "Profesor", "Clave"] + days_of_week]
-
-#Create Excel file with the organized schedule
-df.to_excel('horarios.xlsx', index=False)
-print("Archivo de Excel creado")
+       main.main()
