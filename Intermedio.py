@@ -7,6 +7,7 @@ import sys
 import os
 import main
 import re
+import pandas as pd
 
 # Metodos
 time_pattern = re.compile(r'^\d{2}:\d{2}-\d{2}:\d{2}$')
@@ -129,3 +130,13 @@ def main_intermedio():
 
 if __name__ == "__main__":
        main_intermedio()
+
+#Create a DataFrame with the information typed by the user
+df = pd.DataFrame(materialist, columns=["Materia", "Profesor", "Clave"] + days_of_week)
+
+#Show the DataFrame 
+df = df[["Materia", "Profesor", "Clave"] + days_of_week]
+
+#Create Excel file with the organized schedule
+df.to_excel('horarios.xlsx', index=False)
+print("Archivo de Excel creado")
