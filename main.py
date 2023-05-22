@@ -185,7 +185,7 @@ class Subject:
 Materia: {self.name}
 Profesor: {self.professor}
 ID: {self.key}
-Classes:"""
+Clases:"""
         for classs in self.classes:
             txt += f"\n{classs}"
         return txt
