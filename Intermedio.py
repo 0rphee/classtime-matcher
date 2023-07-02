@@ -8,17 +8,28 @@ import os
 import main
 import re
 import pandas as pd
+import csv
 
 # Regex for time validation
 time_pattern = re.compile(r'^\d{2}:\d{2}-\d{2}:\d{2}$')
 days_of_week = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 
+
+def get_unique_values(csv_file) -> list[str]:
+    unique_values = set()
+    
+    with open(csv_file, 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            unique_values.add(row[0])
+    
+    return list(unique_values)
 # Validate time input
 def validate_time_input(day):
     while True:
         time_input = input(day + ": ").strip()
-        if time_input.upper() == "NULL":
-            return time_input
+        if (time_input.upper() == "NULL") | (time_input == "n"):
+            return "NULL"
         elif time_pattern.match(time_input):
             return time_input
         else:
@@ -77,7 +88,15 @@ problema, se resolverán los conflictos)\n""")
             while(validacion == "S"):
                 #Add the subject to the list
                 temp_list = []
-                temp_list.append(input("\nIngrese el nombre de la materia: ").strip())
+                unique_vals = get_unique_values("intermedio.csv")
+                for index, val in enumerate(unique_vals):
+                    print(f"{index+1} - {val}")
+
+                userInput = int(input("0 para continuar, resto para nuevo nombre de materia: ").strip())
+                if userInput > 0:
+                    temp_list.append(unique_vals[userInput-1])
+                else:
+                    temp_list.append(input("\nIngrese el nombre de la materia: ").strip())
                 temp_list.append(input("Ingrese el nombre del profesor: ").strip())
                 temp_list.append(input("Ingrese la clave de la materia: ").strip())
                 print('\nIngrese el horario de la materia ( 00:00-00:00 || NULL )\n')
@@ -128,13 +147,16 @@ problema, se resolverán los conflictos)\n""")
                         print("Creando carpeta para guardar archivos excel: 'horarios'")
                     print()
                     #Create the excel files
-                    for valid_schedule in valid_schedules:
-                        counter += 1
-                        excel_actual = f'horarios/horario{counter}.xlsx'
-                        print(f"Generando horario {counter} en {excel_actual}")
+                    dataFrames = []
+                    with pd.ExcelWriter("horarios/horarios.xlsx") as writer:
+                        for valid_schedule in valid_schedules:
+                            counter += 1
+                            nombrePaginaActual = f'horario{counter}'
+                            print(f"Generando horario {counter} para pagina {nombrePaginaActual}")
+                            crear_dataframe(valid_schedule).to_excel(writer, sheet_name=nombrePaginaActual, index=False)
 
-                        df = crear_dataframe(valid_schedule)
-                        crear_excel(df, excel_actual)
+                    #     dataFrames.append(crear_dataframe(valid_schedule))
+                    # crear_excel(dataFrames, nombrePaginaActual)
                     print()
                 else:
                     #Clear screen
@@ -172,9 +194,11 @@ def crear_dataframe(materias): # materias: list[main.Subject]
     return df
 
 #Creates an Excel file from the DataFrame
-def crear_excel(df, file):
-    #The index column is excluded 
-    df.to_excel(file, index=False)
+def crear_excel(dataFrames, pageName):
+    # Create an ExcelWriter o
+    with pd.ExcelWriter("horarios/horarios.xlsx") as writer:
+        for df in dataFrames:
+            df.to_excel(writer, sheet_name=pageName, index=False)
 
 def main_intermedio():
     ingreso_materias()
