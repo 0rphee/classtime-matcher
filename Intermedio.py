@@ -9,6 +9,7 @@ import main
 import re
 import pandas as pd
 import csv
+from styleframe import StyleFrame, Styler
 
 # Regex for time validation
 time_pattern = re.compile(r'^\d{2}:\d{2}-\d{2}:\d{2}$')
@@ -103,6 +104,7 @@ problema, se resolverán los conflictos)\n""")
                 # Method to validate the time input
                 for day in days_of_week:
                     temp_list.append(validate_time_input(day))
+                temp_list.append(input("Ingrese el número de créditos de la materia: ").strip())
                 materialist.append(temp_list)
                 #Generate the intermediate file
                 escribir_archivo(temp_list)
@@ -188,10 +190,104 @@ problema, se resolverán los conflictos)\n""")
 
 # Creates DataFrame with the information of each class organized by columns
 def crear_dataframe(materias): # materias: list[main.Subject]
-    materias = map(lambda x: x.format_subject(), materias)
-    columnas = ["MATERIA", "PROFESOR", "ID DE CLASE", "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"]
-    df = pd.DataFrame(materias, columns=columnas)
+    dd = altDt(materias)
+    # materias = map(lambda x: x.format_subject(), materias)
+    # columnas = ["MATERIA", "PROFESOR", "ID DE CLASE", "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"]
+    # df = pd.DataFrame(materias, columns=columnas)
+    # return df
+    return dd
+
+def genDictDia() -> dict:
+    dia = dict()
+    for i in range(6,21):
+        hora_inicio1, min_inicio1 = str(i), "00"
+
+        hora_final2 = str(i+1)
+        if i < 10:
+            hora_inicio1 = "0" + hora_inicio1
+        if (i+1) < 10:
+            hora_final2 = "0" + hora_final2
+        hora_final1, min_final1 = hora_inicio1, "30"
+
+        bloque1 = hora_inicio1 + ":" + min_inicio1 + "-" + hora_final1 + ":" + min_final1
+
+        hora_inicio2 = hora_final1
+        min_inicio2 = min_final1
+        min_final2 = min_inicio1
+
+        bloque2 = hora_inicio2 + ":" + min_inicio2 + "-" + hora_final2 + ":" + min_final2
+
+        dia[bloque1] = ""
+        dia[bloque2] = ""
+    return dia
+
+
+# list[Subject]
+def altDt(materias):
+    def incrementHourStr(string:str) -> str:
+        st = int(string) + 1
+        if st < 10:
+            return "0" + str(st)
+        else :
+            return str(st)
+
+    def incrementTimeStr(hour: str, min:str) -> (str, str):
+        if min == "00":
+            return (hour, "30")
+        else:
+            return (incrementHourStr(hour), "00")
+
+    def compareStrTimes(start: str, end: str) -> list((int,int)): # list of divided intervals
+        # 10:00 - 09:30
+        h1, h2 = start[:2], end[:2]
+        min1, min2 = start[3:], end[3:]
+
+
+        inters = [(h1,min1)]
+
+        
+        next = incrementTimeStr(h1,min1)
+
+        while next != (h2,min2):
+            # print((h1,min1), (h2,min2))
+            inters.append(next)
+            next = incrementTimeStr(next[0], next[1])
+        else:
+            inters.append((next))
+
+        print(inters)
+        intt = [hh + ":" + mm for hh, mm in inters]        
+        pairs = [ (s, e) for s, e in zip(intt,intt[1:])]
+
+        return pairs
+
+    semana = {  "info" : {key:key for key in [f"#materias: {materias.__len__()}"
+                                            , f"#cred: {sum([subj.credits for subj in materias])}"]
+                            },
+                "horas" : {key:key for key in genDictDia().keys()},
+                "lunes": genDictDia(),
+                "martes": genDictDia(),
+                "miercoles": genDictDia(),
+                "jueves": genDictDia(),
+                "viernes": genDictDia() ,
+                # "sabado": genDictDia(),
+                # "domingo": genDictDia(),
+            }
+    for subj in materias:
+        for clss in subj.classes:
+            print(subj.name, clss)
+            for strt,end in compareStrTimes(clss.start_time.__str__(), clss.end_time.__str__()):
+                semana[f"{clss.day}"][f"{strt}-{end}"] = f"{subj.name}\n{subj.professor}" 
+            
+    print(semana)
+    df = StyleFrame(pd.DataFrame.from_dict(semana).fillna(""))
+    df.apply_column_style(cols_to_style="info", styler_obj=Styler(), width=20)
+    df.apply_column_style(cols_to_style="horas", styler_obj=Styler(), width=15)
+    df.apply_column_style(cols_to_style=["lunes","martes", "miercoles", "jueves", "viernes"], styler_obj=Styler(), width=30)  
     return df
+
+
+    
 
 #Creates an Excel file from the DataFrame
 def crear_excel(dataFrames, pageName):

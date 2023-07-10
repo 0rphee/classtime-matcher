@@ -150,13 +150,13 @@ class Time:
 
 # Define an enumeration for days
 class Day(Enum):
-    Monday    = "Lunes"
-    Tuesday   = "Martes"
-    Wednesday = "Miércoles"
-    Thursday  = "Jueves"
-    Friday    = "Viernes"
-    Saturday  = "Sábado"
-    Sunday    = "Domingo"
+    Monday    = "lunes"
+    Tuesday   = "martes"
+    Wednesday = "miercoles"
+    Thursday  = "jueves"
+    Friday    = "viernes"
+    Saturday  = "sabado"
+    Sunday    = "domingo"
     def __init__(self, str_val: str):
         self.str_val = str_val
     def __str__(self) -> str:
@@ -175,16 +175,18 @@ class Class:
 
 # Define a class to represent a subject (name: poo, prof: ivan, classes: [monday 10:00-11:00, etc]))
 class Subject:
-    def __init__(self, name: str, professor: str, key: str, classes: list[Class]):
+    def __init__(self, name: str, professor: str, key: str, classes: list[Class], credits: int):
         self.name = name
         self.professor = professor
         self.key = key
         self.classes = classes
+        self.credits:int = credits
     def __str__(self) -> str:
         txt = f"""
 Materia: {self.name}
 Profesor: {self.professor}
 ID: {self.key}
+Créditos {self.credits}
 Clases:"""
         for classs in self.classes:
             txt += f"\n{classs}"
@@ -296,9 +298,11 @@ def readSubjectFile(filepath: str) -> list[Subject] | None:
         reader = csv.reader(file)
         for row in reader:
             name, prof, key = row[0], row[1], row[2]
-            classes = parseClasses(row[3:])
+            classes = parseClasses(row[3:-1])
+            credits = row[-1]
+
             if classes is not None:
-                subjects.append(Subject(name, prof, key, classes))
+                subjects.append(Subject(name, prof, key, classes, int(credits)))
     if subjects:
         return subjects
     return None
