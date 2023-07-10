@@ -43,6 +43,6 @@ pip install -r requirements.txt
 
 Formato intermedio:
 ```
-materia,profesor,clave,lunes,martes,jueves,viernes,sabado,domingo
-comerialización,alan,01,11:30-13:00,NULL,15:30-17:00,NULL,NULL,NULL,NULL
+materia,profesor,clave,lunes,martes,jueves,viernes,sabado,domingo,creditos
+calculo,annabella,01,11:30-13:00,NULL,15:30-17:00,NULL,NULL,NULL,NULL,5
 ```
